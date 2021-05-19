@@ -1,10 +1,9 @@
-###DiscordBot StartupProject
-<p align='center'>This is what i use as template for my bots, feel free to use :D</p>
+### DiscordBot StartupProject
+This is what i use as template for my bots, feel free to use :D 
 
-##Requirements:</p>
+## Requirements:
 
 <a href="https://nodejs.org/en/download/">Nodejs</a>
 
-<p> discord.js-light </p>
+<p> discord.js-light </p> <br>
 `npm install discord.js-light`
-
