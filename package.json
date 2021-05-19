@@ -1,0 +1,14 @@
+{
+  "name": "discordbot-startupproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "author": "KingProNL",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js-light": "^3.5.11"
+  }
+}

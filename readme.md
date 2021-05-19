@@ -1,0 +1,1 @@
+This is what i use as template for my bots, feel free to use :D
