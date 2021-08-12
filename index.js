@@ -13,12 +13,15 @@ const CACHE_OVERWRITES = false;
 const CACHE_ROLES = false;
 const CACHE_EMOJIS = false;
 const CACHE_PRESENCES = false;
+const CACHE_USERS = true;
+
 
 const discord = require('discord.js-light');
 
 const fs = require('fs');
 
 const client = new discord.Client({
+    cacheUsers: CACHE_USERS,
     cacheGuilds: CACHE_GUILDS,
     cacheChannels: CACHE_CHANNELS,
     cacheOverwrites: CACHE_OVERWRITES,

@@ -5,5 +5,5 @@ module.exports.run = async(bot, msg, args) => {
 }
 
 module.exports.help = {
-    name: "ping"
+    name: "ping",
 }
