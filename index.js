@@ -72,7 +72,7 @@ const client = new discord.Client({
       UserManager: CACHE_CLIENT_USERS, // client.users
       VoiceStateManager: CACHE_GUILD_VOICESTATES // guild.voiceStates
   }),
-  intents: INTENTS //new discord.Intents(INTENTS),
+  intents: INTENTS,
 });
 
 /*
