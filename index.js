@@ -3,6 +3,8 @@
  */
 
 const discord = require('discord.js-light');
+const { REST } = require('@discordjs/rest');
+const { Routes } = require('discord-api-types/v9');
 
 const fs = require('fs');
 
@@ -11,14 +13,8 @@ const fs = require('fs');
  */
 
 const TOKEN = "PUT YOUR BOT TOKEN HERE";
-const ALLOW_DM = true;
-const ALLOW_BOT_USE_COMMANDS = true;
-const PREFIX = "!";
-const INTENTS = 0;
-
-const ACTIVITY_MESSAGE = "";
-const ACTIVITY_TYPE = ""; // PLAYING, STREAMING, LISTENING, WATCHING, CUSTOM, COMPETING
-const STREAMING_URL = null; // if activity is not streaming, then this needs to be null
+const CLIENT_ID = "PUT YOUR CLIENT ID HERE";
+const INTENTS = [];
 
 const CACHE_CLIENT_CHANNELS = 0;
 const CACHE_CLIENT_USERS = 0;
@@ -43,12 +39,18 @@ const CACHE_PERMISSIONOVERWRITES = 0;
 const CACHE_MESSAGE_REACTIONS = 0;
 const CACHE_REACTIONS_USERS = 0;
 
+module.exports = {
+    ACTIVITY_MESSAGE: "",
+    ACTIVITY_TYPE: "", // PLAYING, STREAMING, LISTENING, WATCHING, CUSTOM, COMPETING
+    STREAMING_URL: null, // if activity is not streaming, then this needs to be null
+}
+
 /*
  * Client initialize
  */
 
 const client = new discord.Client({
-  makeCache: Discord.Options.cacheWithLimits({
+  makeCache: discord.Options.cacheWithLimits({
       ApplicationCommandManager: 0, // guild.commands
       BaseGuildEmojiManager: CACHE_GUILD_EMOJIS, // guild.emojis
       ChannelManager: CACHE_CLIENT_CHANNELS, // client.channels
@@ -70,55 +72,56 @@ const client = new discord.Client({
       UserManager: CACHE_CLIENT_USERS, // client.users
       VoiceStateManager: CACHE_GUILD_VOICESTATES // guild.voiceStates
   }),
-  intents: new discord.Intents(INTENTS),
+  intents: INTENTS //new discord.Intents(INTENTS),
 });
 
 /*
  * Commands
  */
 
-client.commands = new discord.Collection();
+const commands = [];
+const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
 
-fs.readdir("./commands/", (err, files) => {
-    if (err) console.log(err);
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	commands.push(command.data.toJSON());
+}
 
-    let jsFiles = files.filter(f => f.split(".").pop() === "js");
+const rest = new REST({ version: '9' }).setToken(TOKEN);
 
-    if (jsFiles.length <= 0) {
-        return
-    }
+(async () => {
+	try {
+		console.log('Started refreshing application (/) commands.');
 
-    jsFiles.forEach((f, i) => {
-        let fileGet = require(`./commands/${f}`);
-        console.log(`${f} loaded!`);
+		await rest.put(
+            Routes.applicationCommands(CLIENT_ID),
+            { body: commands },
+        );
 
-        client.commands.set(fileGet.help.name, fileGet);
-    })
-})
-
-client.on('messageCreate', async (msg) => {
-  if (msg.author.bot && !ALLOW_BOT_USE_COMMANDS) return;
-
-  if (msg.channel.type === "dm" && !ALLOW_DM) return;
-
-  let messageArray = msg.content.split(" ");
-  let command = messageArray[0];
-
-  let arguments = messageArray.slice(1);
-
-  let commands = client.commands.get(command.slice(PREFIX.length));
-
-  if (commands) commands.run(client, msg, arguments)
-});
+		console.log('Successfully reloaded application (/) commands.');
+	} catch (error) {
+		console.error(error);
+	}
+})();
 
 /*
- * Read
+ * Events
  */
 
-client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
+const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 
-    client.user.setActivity(ACTIVITY_MESSAGE, {type: ACTIVITY_TYPE, url: STREAMING_URL});
-});
+for (const file of eventFiles) {
+   const event = require(`./events/${file}`);
+   console.log(`Loading ${event.name}`)
+   if (event.once) {
+       client.once(event.name, (...args) => event.execute(...args, client));
+   } else {
+       client.on(event.name, (...args) => event.execute(...args, client));
+   }
+}
+
+/*
+ * Login
+ */
 
 client.login(TOKEN);
