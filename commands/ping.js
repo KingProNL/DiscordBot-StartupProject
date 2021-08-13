@@ -1,9 +1,9 @@
-const discord = require("discord.js-light");
+const { SlashCommandBuilder } = require('@discordjs/builders');
 
-module.exports.run = async(bot, msg, args) => {
-    return msg.reply("Pong!")
-}
+module.exports.data = new SlashCommandBuilder()
+	.setName('ping')
+	.setDescription('Replies with pong!');
 
-module.exports.help = {
-    name: "ping",
+module.exports.run = async(interaction) => {
+    return await interaction.reply({ content: 'Pong!', ephemeral: true });
 }
