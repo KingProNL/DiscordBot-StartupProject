@@ -1,5 +1,5 @@
 const index = require('../index.js');
-const discord = require('discord.js-light');
+const discord = require('discord.js');
 
 const fs = require('fs');
 

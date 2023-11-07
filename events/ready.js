@@ -1,4 +1,4 @@
-const discord = require("discord.js-light");
+const discord = require("discord.js");
 const index = require('../index.js');
 
 module.exports = {

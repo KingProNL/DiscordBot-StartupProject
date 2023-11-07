@@ -2,42 +2,21 @@
  * Imports
  */
 
-const discord = require('discord.js-light');
+const discord = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 
 const fs = require('fs');
 
+require('dotenv').config();
+
 /*
  * Configuration
  */
 
-const TOKEN = "PUT YOUR BOT TOKEN HERE";
-const CLIENT_ID = "PUT YOUR CLIENT ID HERE";
+const TOKEN = process.env.TOKEN;
+const CLIENT_ID = process.env.CLIENT_ID;
 const INTENTS = [];
-
-const CACHE_CLIENT_CHANNELS = 0;
-const CACHE_CLIENT_USERS = 0;
-
-const CACHE_GUILDS = Infinity;
-const CACHE_GUILD_CHANNELS = 0;
-const CACHE_GUILD_EMOJIS = 0;
-const CACHE_GUILD_STICKERS = 0;
-const CACHE_GUILD_BANS = 0;
-const CACHE_GUILD_INVITES = 0;
-const CACHE_GUILD_MEMBERS = 0;
-const CACHE_GUILD_PRESENCE = 0;
-const CACHE_GUILD_ROLES = 0;
-const CACHE_GUILD_STAGES = 0;
-const CACHE_GUILD_VOICESTATES = 0;
-
-
-const CACHE_MESSAGES = 0;
-const CACHE_THREADS = 0;
-const CACHE_THREADS_MEMBERS = 0;
-const CACHE_PERMISSIONOVERWRITES = 0;
-const CACHE_MESSAGE_REACTIONS = 0;
-const CACHE_REACTIONS_USERS = 0;
 
 module.exports = {
     ACTIVITY_MESSAGE: "",
@@ -50,28 +29,6 @@ module.exports = {
  */
 
 const client = new discord.Client({
-  makeCache: discord.Options.cacheWithLimits({
-      ApplicationCommandManager: 0, // guild.commands
-      BaseGuildEmojiManager: CACHE_GUILD_EMOJIS, // guild.emojis
-      ChannelManager: CACHE_CLIENT_CHANNELS, // client.channels
-      GuildChannelManager: CACHE_GUILD_CHANNELS, // guild.channels
-      GuildBanManager: CACHE_GUILD_BANS, // guild.bans
-      GuildInviteManager: CACHE_GUILD_INVITES, // guild.invites
-      GuildManager: CACHE_GUILDS, // client.guilds
-      GuildMemberManager: CACHE_GUILD_MEMBERS, // guild.members
-      GuildStickerManager: CACHE_GUILD_STICKERS, // guild.stickers
-      MessageManager: CACHE_MESSAGES, // channel.messages
-      PermissionOverwriteManager: CACHE_PERMISSIONOVERWRITES, // channel.permissionOverwrites
-      PresenceManager: CACHE_GUILD_PRESENCE, // guild.presences
-      ReactionManager: CACHE_MESSAGE_REACTIONS, // message.reactions
-      ReactionUserManager: CACHE_REACTIONS_USERS, // reaction.users
-      RoleManager: CACHE_GUILD_ROLES, // guild.roles
-      StageInstanceManager: CACHE_GUILD_STAGES, // guild.stageInstances
-      ThreadManager: CACHE_THREADS, // channel.threads
-      ThreadMemberManager: CACHE_THREADS_MEMBERS, // threadchannel.members
-      UserManager: CACHE_CLIENT_USERS, // client.users
-      VoiceStateManager: CACHE_GUILD_VOICESTATES // guild.voiceStates
-  }),
   intents: INTENTS,
 });
 
