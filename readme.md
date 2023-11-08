@@ -3,9 +3,9 @@ This is what i use as template for my bots, feel free to use :D
 
 ## Usage:
 
-* Change TOKEN to your discord bot token (index:15)
-* Change CLIENT_ID to your discord bot client id (index:16)
-* Change INTENTS to the intents you need (index:17)
+* Change TOKEN to your discord bot token (env)
+* Change CLIENT_ID to your discord bot client id (env)
+* Change INTENTS to the intents you need (index:19)
 
 ### Optional:
 
